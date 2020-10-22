@@ -1,0 +1,72 @@
+import React from 'react';
+import { message } from 'antd';
+import { useSelector } from 'react-redux';
+import logoIcon from 'assets/images/logo-icon.png';
+import BN from 'bn.js';
+
+export default function Claim() {
+  const address = useSelector(state => state.walletAddress);
+  const tranche = useSelector(state => state.tranche);
+  const instanceAirdropContract = useSelector(state => state.instanceAirdropContract);
+  const serverUrl = process.env.REACT_APP_SERVER_URL;
+
+  const getProof = async () => {
+    try {
+      const response = await fetch(`${serverUrl}/proof/${tranche}/${address}`);
+      if (response.status === 400) {
+        return false;
+      }
+
+      const result = await response.json();
+
+      return result.proof;
+    } catch (err) {
+      message.error('Transaction has failed');
+    }
+  };
+
+  const claim = async () => {
+    try {
+      const isClaimed = await instanceAirdropContract.methods.claimed(tranche, address).call();
+
+      if (isClaimed) {
+        message.error('You have already claimed');
+        return;
+      }
+
+      const proof = await getProof();
+      if (!proof) {
+        message.error('You have not completed all step');
+        return;
+      }
+
+      let response = await fetch(`${serverUrl}/tranche`);
+      response = await response.json();
+      const amount = new BN(response.amount);
+
+      const result = await instanceAirdropContract.methods
+        .claimWeek(address.toLowerCase(), tranche, amount, proof)
+        .send({ from: address });
+      if (result.status) {
+        message.success('Receive Airdrop successfully');
+      }
+    } catch (err) {
+      console.log(err);
+      message.error('Something went wrong.');
+    }
+  };
+
+  return (
+    <div>
+      <a className='btn-icon wow fadeIn' href='#' onClick={() => claim()}>
+        <span className='btn-content'>
+          <span className='icon'>
+            <img src={logoIcon} alt='logo-icon' />
+          </span>
+          Get airdrop tokens
+          <strong>Claim</strong>
+        </span>
+      </a>
+    </div>
+  );
+}
