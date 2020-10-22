@@ -6,12 +6,6 @@
   <br>
 </h1>
 
-> Stake your PHONE, earn iPhone, mint NFTs.
-
-## PHONE Token
-
-**PHONE** is the native token in PhoneFarm Finance ecosystem.
-
 ## Get PHONE token airdrop
 
 - Step 1: Start a conversation with PhoneFarm Bot here [http://t.me/phonefarm_airdrop_bot](http://t.me/phonefarm_airdrop_bot)
