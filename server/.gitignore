@@ -1,5 +1,6 @@
 /node_modules
 /contracts
+/data
 package-lock.json
 yarn.lock
 
