@@ -15,10 +15,11 @@ router.get('/:trancheId/:address', async (req, res) => {
     let address = req.params.address;
     address = address.toLowerCase();
 
-    const info = await AirDropList.find({ tranche: req.params.trancheId, address });
-    const { twitter, mention, telegram, discord } = info;
+    const info = await AirDropList.findOne({ tranche: req.params.trancheId, address });
 
-    if (!twitter || !mention || !telegram || !discord) {
+    const { twitter, following, retweet, telegram } = info;
+
+    if (!twitter || !following || !retweet || !telegram) {
       return res.status(400).json({ msg: 'You have not completed all step' });
     }
 

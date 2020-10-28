@@ -18,14 +18,13 @@ router.get('/:address', async (req, res) => {
       return res.status(404).json({ msg: 'Address is not registered' });
     }
 
-    const { twitter, following, retweet, telegram, discord } = result;
+    const { twitter, following, retweet, telegram } = result;
 
     return res.status(200).json({
       twitter,
       following,
       retweet,
       telegram,
-      discord,
     });
   } catch (error) {
     return res.status(500).json({ msg: 'Internal Server Error' });
@@ -41,14 +40,13 @@ router.get('/tele/:username', async (req, res) => {
       return res.status(404).json({ msg: 'telegram user is not registered' });
     }
 
-    const { twitter, following, retweet, telegram, discord } = result;
+    const { twitter, following, retweet, telegram } = result;
 
     return res.status(200).json({
       twitter,
       following,
       retweet,
       telegram,
-      discord,
     });
   } catch (error) {
     return res.status(500).json({ msg: 'Internal Server Error' });
