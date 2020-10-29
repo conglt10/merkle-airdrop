@@ -1,10 +1,14 @@
 import React from 'react';
 import { message } from 'antd';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import * as actions from 'store/actions';
 import logoIcon from 'assets/images/logo-icon.png';
 import BN from 'bn.js';
+import './style.css';
 
 export default function Claim() {
+  const dispatch = useDispatch();
+  const phoneToken = process.env.REACT_APP_PHONE_TOKEN_ADDRESS;
   const address = useSelector(state => state.walletAddress);
   const tranche = useSelector(state => state.tranche);
   const instanceAirdropContract = useSelector(state => state.instanceAirdropContract);
@@ -20,13 +24,16 @@ export default function Claim() {
       const result = await response.json();
 
       return result.proof;
-    } catch (err) {
-      message.error('Transaction has failed');
-    }
+    } catch (err) { }
   };
 
   const claim = async () => {
     try {
+      if (!address) {
+        message.error('Please connect MetaMask');
+        return;
+      }
+
       const isClaimed = await instanceAirdropContract.methods.claimed(tranche, address).call();
 
       if (isClaimed) {
@@ -40,6 +47,8 @@ export default function Claim() {
         return;
       }
 
+      dispatch(actions.setLoading(true));
+
       let response = await fetch(`${serverUrl}/tranche`);
       response = await response.json();
       const amount = new BN(response.amount);
@@ -50,9 +59,13 @@ export default function Claim() {
       if (result.status) {
         message.success('Receive Airdrop successfully');
       }
+      dispatch(actions.setLoading(false));
     } catch (err) {
-      console.log(err);
-      message.error('Something went wrong.');
+      dispatch(actions.setLoading(false));
+      if (err.code === 4001) {
+        return;
+      }
+      message.error('Claim has failed');
     }
   };
 
@@ -67,6 +80,16 @@ export default function Claim() {
           <strong>Claim</strong>
         </span>
       </a>
+
+      <ol className='add-token'>
+        <li>
+          Open MetaMask, in <strong>Assets</strong> tab, click <strong>Add Token</strong>
+        </li>
+        <li>
+          Choose <strong>Custom Token</strong>
+        </li>
+        <li>Fill PHONE Token address: {phoneToken.toLowerCase()}</li>
+      </ol>
     </div>
   );
 }

@@ -14,14 +14,16 @@ import serviceShape2 from 'assets/images/service-shape-2.png';
 import serviceShape3 from 'assets/images/service-shape-3.png';
 import logo from 'assets/images/logo.png';
 import { DollarOutlined, GiftOutlined, MobileOutlined } from '@ant-design/icons';
-import { BackTop } from 'antd';
+import { BackTop, Spin } from 'antd';
 import { connectMetaMask } from 'utils/connectMetaMask';
+import { useSelector } from 'react-redux';
 
 import './App.css';
 
 import './assets/scss/style-landing-page.scss';
 
 function App() {
+  const loading = useSelector(state => state.loading);
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   let [mainmenuArea, setMainmenuArea] = useState('');
@@ -74,6 +76,7 @@ function App() {
           </div>
         </div>
       </div>
+      <Spin spinning={loading} size='large' tip='Loading...'></Spin>
       <section className='section-padding-top feature-area'>
         <div className='container'>
           <div className='row'>
