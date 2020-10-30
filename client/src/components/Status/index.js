@@ -55,7 +55,7 @@ export default function Status() {
 
   return (
     <div>
-      <p className='balance'>Balance: {balance}</p>
+      <p className='balance'>Balance: {balance} PHONE</p>
       <div className='progress-status'>
         <span className='title-status'>Your Twitter account</span>
         <Progress type='circle' percent={100} width={40} status={twitter} />

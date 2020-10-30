@@ -50,14 +50,13 @@ async function seedNewAllocations() {
 
     await PhoneTokenContract.methods
       .mint(operator.address, totalAmount.toString())
-      .send({ from: operator.address, gas: process.env.ETH_GAS_LIMIT });
+      .send({ from: operator.address });
 
     await PhoneTokenContract.methods
       .approve(PhoneAirdropAddress, totalAmount.toString())
-      .send({ from: operator.address, gas: process.env.ETH_GAS_LIMIT });
+      .send({ from: operator.address });
     await PhoneAirdropContract.methods.seedNewAllocations(merkleRoot, totalAmount.toString()).send({
       from: operator.address,
-      gas: process.env.ETH_GAS_LIMIT,
     });
     console.log('Done !');
     process.exit(0);
