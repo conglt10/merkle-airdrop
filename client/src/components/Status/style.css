@@ -7,3 +7,9 @@ span.title-status {
 div.progress-status {
   margin-bottom: 15px;
 }
+
+p.balance {
+  text-align: left;
+  font-size: 30px;
+  font-weight: bold;
+}
